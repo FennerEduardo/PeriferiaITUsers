@@ -1,0 +1,9 @@
+<button (click)="reloadUsers()">Cargar Usuarios</button>
+<input type="text" placeholder="Buscar por nombre o correo electrónico" (input)="onSearch($event)">
+<ul>
+  <li *ngFor="let user of filteredUsers">
+    {{ user?.name }} - {{ user?.email }}
+  </li>
+</ul>
+
+
