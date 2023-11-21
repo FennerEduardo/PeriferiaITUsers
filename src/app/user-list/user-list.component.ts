@@ -13,6 +13,7 @@ import { User } from './model/UserModel';
 export class UserListComponent {
   users: User[] = [];
   filteredUsers: User[] = [];
+  selectedUser: any;
 
   constructor(private userService: UserService) {}
 
@@ -23,10 +24,25 @@ export class UserListComponent {
   loadUsers() {
     this.users = this.userService.getUsers();
     this.filteredUsers = [...this.users];
+    this.selectedUser = null;
   }
 
   reloadUsers() {
     this.loadUsers();
+  }
+
+  reloadUsersFromApi() {
+    this.userService
+      .getUsersFromApi()
+      .then((users) => {
+        this.users = [...users];
+        this.filteredUsers = [...users];
+        this.selectedUser = null;
+      })
+      .catch((error) => {
+        this.loadUsers();
+        console.log(error);
+      });
   }
 
   onSearch(event: Event) {
@@ -37,8 +53,15 @@ export class UserListComponent {
     }
 
     const lowercaseValue = value.toLowerCase();
-    this.filteredUsers = this.users.filter(user =>
-      user.name.toLowerCase().includes(lowercaseValue) || user.email.toLowerCase().includes(lowercaseValue)
+    this.filteredUsers = this.users.filter(
+      (user) =>
+        user.name.toLowerCase().includes(lowercaseValue) ||
+        user.email.toLowerCase().includes(lowercaseValue)
     );
+  }
+
+  getUserById(id: Number) {
+    const user = this.users.find((user) => user.id === id);
+    this.selectedUser = user;
   }
 }

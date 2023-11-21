@@ -1,9 +1,61 @@
-<button (click)="reloadUsers()">Cargar Usuarios</button>
-<input type="text" placeholder="Buscar por nombre o correo electrónico" (input)="onSearch($event)">
-<ul>
-  <li *ngFor="let user of filteredUsers">
-    {{ user?.name }} - {{ user?.email }}
-  </li>
-</ul>
+<div class="w-10/12 mx-auto lg:flex my-8 p-6">
+
+  <div class="lg:w-1/2 lg:border-r lg:border-gray-300 p-4">
+    <div class="flex space-x-4 mb-4">
+      <div class="flex space-x-4 mb-4">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          (click)="reloadUsers()">Load Users from Store</button>
+        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          (click)="reloadUsersFromApi()">Load Users From Api</button>
+        <input class="border border-gray-300 rounded py-2 px-4" type="text"
+          placeholder="Buscar por nombre o correo electrónico" (input)="onSearch($event)">
+      </div>
+    </div>
+
+    <ul>
+      <li class="border-b border-gray-300 py-2" *ngFor="let user of filteredUsers">
+        <span class="text-lg font-semibold">{{ user?.name }}</span> - <span class="text-gray-600">{{ user?.email
+          }}</span>
+        <button class="ml-2 text-blue-500 hover:text-blue-700" (click)="getUserById(user.id)">Show User</button>
+      </li>
+    </ul>
+
+  </div>
 
 
+  <div class="lg:w-1/2">
+    <div *ngIf="selectedUser">
+      <div class="p-4 border-b border-gray-300">
+        <h2 class="text-xl font-semibold">{{ selectedUser.name }}</h2>
+        <p class="text-gray-600">{{ selectedUser.email }}</p>
+        <div *ngIf="selectedUser.username" class="mb-2">
+          <strong>Username:</strong> {{ selectedUser.username }}
+        </div>
+
+        <div *ngIf="selectedUser.phone" class="mb-2">
+          <strong>Phone:</strong> {{ selectedUser.phone }}
+        </div>
+
+        <div *ngIf="selectedUser.website" class="mb-2">
+          <strong>Website:</strong> <a href="{{ selectedUser.website }}" target="_blank">{{ selectedUser.website }}</a>
+        </div>
+
+        <div *ngIf="selectedUser.address">
+          <h3 class="text-lg font-semibold mt-4 mb-2">Address:</h3>
+          <p>{{ selectedUser.address.street }}, {{ selectedUser.address.suite }}, {{ selectedUser.address.city }}, {{
+            selectedUser.address.zipcode }}</p>
+        </div>
+
+
+        <div *ngIf="selectedUser.company">
+          <h3 class="text-lg font-semibold mt-4 mb-2">Company:</h3>
+          <p>{{ selectedUser.company.name }} - {{ selectedUser.company.catchPhrase }} - {{ selectedUser.company.bs }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!selectedUser" class="p-4">
+      <p class="text-center text-gray-500">Select User to show </p>
+    </div>
+  </div>
+</div>
